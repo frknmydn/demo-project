@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diary-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diary
+  template:
+    metadata:
+      labels:
+        app: diary
+    spec:
+      containers:
+        - name: diary
+          #image: us.gcr.io/ticketing-dev-370913/auth
+          image: furkanmeydan/diary:latest
+          ports:
+           - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diary-srv
+spec:
+  selector:
+    app: diary
+  type: ClusterIP
+  ports:
+    - name: diary
+      protocol: TCP
+      port: 3000 
+      targetPort: 3000 
+      

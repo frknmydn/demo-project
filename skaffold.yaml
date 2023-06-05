@@ -1,0 +1,43 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+build:
+  local:
+    push: false
+  artifacts:
+  - image: furkanmeydan/service-auth
+    context: auth
+    sync:
+      manual:
+      - src: src/**/*.ts
+        dest: .
+    docker:
+      dockerfile: Dockerfile
+  - image: furkanmeydan/client
+    context: client
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: Dockerfile
+  - image: furkanmeydan/diary
+    context: diary
+    sync:
+      manual:
+        - dest: src/**/*.ts
+          src: .
+    docker:
+      dockerfile: Dockerfile
+  - image: furkanmeydan/notification
+    context: notification
+    sync:
+      manual:
+      - src: src/**/*.ts
+        dest: .
+    docker:
+      dockerfile: Dockerfile
+manifests:
+  rawYaml:
+  - ./infra/k8s/*
+deploy:
+  kubectl: {}
